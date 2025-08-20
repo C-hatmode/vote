@@ -1,0 +1,21 @@
+from Crypto.Cipher import AES
+import base64, json
+from utils.keysecret import SECRET_KEY
+
+# paste values here from Compass
+ciphertext_b64 = "/oPb/hN1qT953Rnermyw7aoQtHx9+0SQaLbIWolwiWFnrZmHm4vwVs16g+SMl0YNFNPPViI4JQVsqvPUDZ7oQ9d3RrFFBJ9mLkl6yj9pOBcQuz1HtQXg6VHQt/nv+AtEizDsLkLTC/LZjrN0JXk6mBPdDq8jZVKobSQcxqPNkK0gIPpdV2gaJwO9Okc0gWCIHQZSdw8B/jgTwNJMjYHXI6MnETjHisPteXe/zQmn/eyWWYW1tzqjPFYuQ74NmYdRQrbBRlSNCcJ24Xd2YkXYAkTi7B5Y9WnoBcEVjuRMxryYuHguCwCSZmKQ7qsOMFYH400OxJX2EKCukRC1d+iaDEDG7Ij+5D9uZHtKzAvHIQYkF9ZKUv19etXHoWQ+NnjnorcbvCODfZHPX4pxKPKO1IFRxUuot2gUIayOhmuMilfa72dAfAPlcmnF+lAHXCcUPmUltF8hbm9Y/qgZj+F2b/aLgtAW/q6zDfyB5eaC01IoOCUBCX9Q+5iDOkRLwpNaCIsDGgdqJX3j74ndhu5x9aQJkOkZh0sR7Rp4ZikyCH+eA4XBWYhJ7rZQmlzmhmjESftdZvW/WEnxujWkk0OnrQ4FFIPMS62aA1hhcMyALTTqNf6i6W+IPG13xrZjMhqPAJjeQl3R6xNerlAiglZTu4FGtvUEb2SF78v0AtlULAUu8AElcT0VDUFgDzwRSbvDTECdstLQaIaFenzrDpf4XPW7fK4JSqT6BXt8Qr/dRZNW0y2SN0S2xaS9NGv5oq/FKA4Nro4ropWlIcElCivcCBznj+fry4A8UMiDk1k2T8SLrk2BKEBSSrBEFqadv9g+8vDOd3AEaoPPhhMq5DYDPcDWJRryqlI5LjHwXgzWmppUuqwXOrQ8CG0WJIrk6DHibNj8vhBv9bn5JSSMmOgP/4b1p2F8WhwwPltNkqEgCbMyPBlFOF7ij7kTfsA7MVgZFAqPxn4Nw/1pf1qJJCvct7WE4i91Vu1WxxPtqlNE9RrpifrTYM538CDKUumH+WFYUiHcmdIKlLJKpm+AgixieURanTDaeUz461SzmyCKf+CFLP63C2kC14pMfNMPcKtRZJItgOl6m11zN2u402Fvz/69zpaCwZXwtD0qfgeY8JjwhEtMEorMYZ9ChvqfnOXyZxPXGgtb0MBV7llTHRd92lIqUq7WvUc0jvSiOP5wpMiW7AmxButKbL4IxK0Te212TRgdHbroU1Ld/+O02YoorRrgfotOpUBpM+FXyzcJUmY4U/5FUqFsgBCPqI9IzFu8MsExKvjx2YHu2craIlBI2PPPGWihlgbXjhBQiB2DO37nWV3opzk/zAN72pFtpdCaAnx4oPtx7rPuaH9iWyCezg=="
+nonce_b64 = "Sk4AovTrHAfk2T0fcuMefA=="
+tag_b64 = "UcBRrkTxJFb6TO4Sat0jxA=="
+
+ciphertext = base64.b64decode(ciphertext_b64)
+nonce = base64.b64decode(nonce_b64)
+tag = base64.b64decode(tag_b64)
+
+print("Key length:", len(SECRET_KEY))
+
+try:
+    cipher = AES.new(SECRET_KEY, AES.MODE_GCM, nonce=nonce)
+    decrypted = cipher.decrypt_and_verify(ciphertext, tag)
+    print("✅ Success:", decrypted[:100])  # first 100 bytes
+except Exception as e:
+    print("❌ Failed:", e)
